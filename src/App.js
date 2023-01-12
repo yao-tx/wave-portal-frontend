@@ -33,6 +33,7 @@ const findMetaMaskAccount = async() => {
 
 function App() {
   const [currentAccount, setCurrentAccount] = useState("");
+  const [isLoading, setLoading] = useState(false);
   const contractAddress = "0x1fB3E24A807Db48c664510038cd5fDd1B72C5343";
   const contractABI = abi.abi;
 
@@ -56,6 +57,8 @@ function App() {
   };
 
   const wave = async () => {
+    setLoading(true);
+
     try {
       const { ethereum } = window;
 
@@ -81,6 +84,8 @@ function App() {
     } catch (error) {
       console.log(error);
     }
+
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -89,24 +94,32 @@ function App() {
     });
   }, []);
 
+  let buttonText = "Wave at Me";
+
+  if (isLoading) {
+    buttonText = "Mining...";
+  }
+
   return (
     <div className="mainContainer">
       <div className="dataContainer">
-        <div className="header">
+        <h1 className="header">
           👋 Hey there!
-        </div>
+        </h1>
         <div className="bio">
           I'm TX, a full-stack web dev from Singapore learning about Web3.<br />
           Connect your Ethereum wallet and wave at me!
         </div>
-        <button className="waveButton" onClick={wave}>
-          Wave at Me
-        </button>
-        {!currentAccount && (
-          <button className="waveButton" onClick={connectWallet}>
-            Connect wallet
+        <div className="buttons">
+          <button className="waveButton" onClick={wave} disabled={isLoading ? true : false}>
+            {buttonText}
           </button>
-        )}
+          {!currentAccount && (
+            <button className="waveButton" onClick={connectWallet}>
+              Connect wallet
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

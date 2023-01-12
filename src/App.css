@@ -1,8 +1,12 @@
+body {
+  background-color: #230046;
+  color: #ffffff;
+}
 .mainContainer {
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-top: 64px;
+  margin-top: 128px;
 }
 
 .dataContainer {
@@ -15,20 +19,28 @@
 .header {
   text-align: center;
   font-size: 32px;
-  font-weight: 600;
+  font-weight: 900;
 }
 
 .bio {
   text-align: center;
-  color: gray;
+  color: #ffffff;
+  font-weight: 700;
   margin-top: 16px;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  margin-top: 32px;
 }
 
 .waveButton {
   cursor: pointer;
   margin-top: 16px;
-  padding: 8px;
+  padding: 12px;
   border: 0;
   border-radius: 5px;
-  
+  font-size: 16px;
+  font-weight: 600;
 }
