@@ -1,21 +1,39 @@
-import React, { useEffect } from "react";
-import { ethers } from "ethers";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 
 const getEthereumObject = () => window.ethereum;
 
-function App() {
-  const wave = () => {
-
-  }
-
-  useEffect(() => {
+const findMetaMaskAccount = async() => {
+  try {
     const ethereum = getEthereumObject();
+
     if (!ethereum) {
-      console.log("Make sure you have metamask!");
-    } else {
-      console.log("We have the ethereum object", ethereum);
+      console.error("Make sure you have Metamask!");
+      return null;
     }
+
+    console.log("We have the Ethereum object", ethereum);
+    const accounts = await ethereum.request({ method: "eth_accounts" });
+
+    if (accounts.lengthh !== 0) {
+      const account = accounts[0];
+      console.log("Found an authorized account:", account);
+      return account;
+    } else {
+      console.log("No authorized account found");
+      return null;
+    }
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+function App() {
+  useEffect(() => {
+    findMetaMaskAccount().then((account) => {
+      setCurrentAccount(account);
+    });
   }, []);
 
   return (
