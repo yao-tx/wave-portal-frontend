@@ -30,6 +30,27 @@ const findMetaMaskAccount = async() => {
 };
 
 function App() {
+  const [currentAccount, setCurrentAccount] = useState("");
+
+  const connectWallet = async () => {
+    try {
+      const ethereum = getEthereumObject();
+      if (!ethereum) {
+        alert("Get MetaMask!");
+        return;
+      }
+
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
+
+      console.log("Connected", accounts[0]);
+      setCurrentAccount(accounts[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     findMetaMaskAccount().then((account) => {
       setCurrentAccount(account);
@@ -46,9 +67,14 @@ function App() {
           I'm TX, a full-stack web dev from Singapore learning about Web3.<br />
           Connect your Ethereum wallet and wave at me!
         </div>
-        <button className="waveButton" onClick={wave}>
+        <button className="waveButton" onClick={null}>
           Wave at Me
         </button>
+        {!currentAccount && (
+          <button className="waveButton" onClick={connectWallet}>
+            Connect wallet
+          </button>
+        )}
       </div>
     </div>
   );
