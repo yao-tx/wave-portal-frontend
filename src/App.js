@@ -1,5 +1,7 @@
+import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
 import "./App.css";
+import abi from "./utils/WavePortal.json";
 
 const getEthereumObject = () => window.ethereum;
 
@@ -31,6 +33,8 @@ const findMetaMaskAccount = async() => {
 
 function App() {
   const [currentAccount, setCurrentAccount] = useState("");
+  const contractAddress = "0x1fB3E24A807Db48c664510038cd5fDd1B72C5343";
+  const contractABI = abi.abi;
 
   const connectWallet = async () => {
     try {
@@ -46,6 +50,25 @@ function App() {
 
       console.log("Connected", accounts[0]);
       setCurrentAccount(accounts[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const wave = async () => {
+    try {
+      const { ethereum } = window;
+
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+
+        let count = await wavePortalContract.getTotalWaves();
+        console.log("Retrieved total wave count...", count.toNumber());
+      } else {
+        console.log("Ethereum object doesn't exist!");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -67,7 +90,7 @@ function App() {
           I'm TX, a full-stack web dev from Singapore learning about Web3.<br />
           Connect your Ethereum wallet and wave at me!
         </div>
-        <button className="waveButton" onClick={null}>
+        <button className="waveButton" onClick={wave}>
           Wave at Me
         </button>
         {!currentAccount && (
