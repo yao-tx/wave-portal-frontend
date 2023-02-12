@@ -10,7 +10,7 @@ function App() {
   const [isLoading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [currentAccount, setCurrentAccount] = useState("");
-  const contractAddress = "0xd0Aa4209C93093D6BF4095ec9b8ceA5395C28955";
+  const contractAddress = "0x89576a1Caa8F7CE24D45F4f7c0470467F35beB65";
 
   const checkIfWalletIsConnected = async () => {
     try {
