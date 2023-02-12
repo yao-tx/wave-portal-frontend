@@ -14,7 +14,7 @@ function App() {
 
   const checkIfWalletIsConnected = async () => {
     try {
-      const ethereum = window;
+      const { ethereum } = window;
 
       if (!ethereum) {
         console.error("Make sure you have Metamask!");
@@ -31,35 +31,6 @@ function App() {
         setCurrentAccount(account);
       } else {
         console.log("No authorized account found");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getAllWaves = async () => {
-    try {
-      const { ethereum } = window;
-
-      if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-        const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
-        const waves = await wavePortalContract.getAllWaves();
-
-        let wavesCleaned = [];
-        
-        waves.forEach(wave => {
-          wavesCleaned.push({
-            address: wave.waver,
-            timestamp: new Date(wave.timestamp * 1000),
-            message: wave.message
-          });
-        });
-
-        setAllWaves(wavesCleaned);
-      } else {
-        console.log("Ethereum object doesn't exist!");
       }
     } catch (error) {
       console.log(error);
@@ -116,6 +87,33 @@ function App() {
     }
 
     setLoading(false);
+  };
+
+  const getAllWaves = async () => {
+    const { ethereum } = window;
+
+    try {
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+        const waves = await wavePortalContract.getAllWaves();
+
+        const wavesCleaned = waves.map((wave) => {
+          return {
+            address: wave.waver,
+            timestamp: new Date(wave.timestamp * 1000),
+            message: wave.message,
+          };
+        });
+
+        setAllWaves(wavesCleaned);
+      } else {
+        console.log("Ethereum object doesn't exist!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
