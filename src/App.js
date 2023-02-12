@@ -1,42 +1,40 @@
 import { ethers } from "ethers";
-import React, { useEffect, useState } from "react";
-import "./App.css";
 import abi from "./utils/WavePortal.json";
+import React, { useEffect, useState } from "react";
 
-const getEthereumObject = () => window.ethereum;
-
-const findMetaMaskAccount = async() => {
-  try {
-    const ethereum = getEthereumObject();
-
-    if (!ethereum) {
-      console.error("Make sure you have Metamask!");
-      return null;
-    }
-
-    console.log("We have the Ethereum object", ethereum);
-    const accounts = await ethereum.request({ method: "eth_accounts" });
-
-    if (accounts.lengthh !== 0) {
-      const account = accounts[0];
-      console.log("Found an authorized account:", account);
-      return account;
-    } else {
-      console.log("No authorized account found");
-      return null;
-    }
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
-};
+import "./App.css";
 
 function App() {
-  const [currentAccount, setCurrentAccount] = useState("");
-  const [isLoading, setLoading] = useState(false);
-  const contractAddress = "0xd0Aa4209C93093D6BF4095ec9b8ceA5395C28955";
-  const [allWaves, setAllWaves] = useState([]);
   const contractABI = abi.abi;
+  const [allWaves, setAllWaves] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+  const [currentAccount, setCurrentAccount] = useState("");
+  const contractAddress = "0xd0Aa4209C93093D6BF4095ec9b8ceA5395C28955";
+
+  const checkIfWalletIsConnected = async () => {
+    try {
+      const ethereum = window;
+
+      if (!ethereum) {
+        console.error("Make sure you have Metamask!");
+        return;
+      } else {
+        console.log("We have the Ethereum object", ethereum);
+      }
+
+      const accounts = await ethereum.request({ method: "eth_accounts" });
+
+      if (accounts.length !== 0) {
+        const account = accounts[0];
+        console.log("Found an authorized account: ", account);
+        setCurrentAccount(account);
+      } else {
+        console.log("No authorized account found");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getAllWaves = async () => {
     try {
@@ -65,11 +63,12 @@ function App() {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const connectWallet = async () => {
     try {
-      const ethereum = getEthereumObject();
+      const { ethereum } = window;
+
       if (!ethereum) {
         alert("Get MetaMask!");
         return;
@@ -86,7 +85,7 @@ function App() {
     }
   };
 
-  const wave = async () => {
+  const wave = async (message) => {
     setLoading(true);
 
     try {
@@ -100,7 +99,7 @@ function App() {
         let count = await wavePortalContract.getTotalWaves();
         console.log("Retrieved total wave count...", count.toNumber());
 
-        const waveTxn = await wavePortalContract.wave("Hello, world! This is a message.");
+        const waveTxn = await wavePortalContract.wave(message);
         console.log("Mining...", waveTxn.hash);
 
         await waveTxn.wait();
@@ -119,9 +118,8 @@ function App() {
   };
 
   useEffect(() => {
-    findMetaMaskAccount().then((account) => {
-      setCurrentAccount(account);
-    });
+    getAllWaves();
+    checkIfWalletIsConnected();
   }, []);
 
   let buttonText = "Wave at Me";
@@ -133,37 +131,47 @@ function App() {
   return (
     <div className="mainContainer">
       <div className="dataContainer">
-        <h1 className="header">
-          👋 Hey there!
-        </h1>
+        <h1 className="header">👋 Hey there!</h1>
+
         <div className="bio">
           I'm TX, a full-stack web dev from Singapore learning about Web3.<br />
           Connect your Ethereum wallet and wave at me!
         </div>
+
+        <textarea
+          className="waveMessage"
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Say something..."
+        />
+
         <div className="buttons">
-          <button className="waveButton" onClick={wave} disabled={isLoading ? true : false}>
+          <button className="waveButton" onClick={() => wave(message)} disabled={isLoading ? true : false}>
             {buttonText}
           </button>
+
           {!currentAccount && (
             <button className="waveButton" onClick={connectWallet}>
               Connect wallet
             </button>
           )}
+
           {currentAccount && (
-            <div>
+            <div className="connection-status">
               <span className="connected-pill" /> Wallet Connected
             </div>
           )}
+        </div>
 
-          {allWaves.map((wave, index) => {
-            return (
-              <div key={index} style={{ backgroundColor: "OldLace", marginTop: "16px", padding: "8px" }}>
-                <div>Address: {wave.address}</div>
-                <div>Time: {wave.timestamp.toString()}</div>
-                <div>Message: {wave.message}</div>
-              </div>
-            )
-          })}
+        <div className="wavesContainer">
+        {allWaves.map((wave, index) => {
+          return (
+            <div key={index} style={{ backgroundColor: "OldLace", marginTop: "16px", padding: "8px" }}>
+              <div>Address: {wave.address}</div>
+              <div>Time: {wave.timestamp.toString()}</div>
+              <div>Message: {wave.message}</div>
+            </div>
+          )
+        })}
         </div>
       </div>
     </div>

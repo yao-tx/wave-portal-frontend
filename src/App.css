@@ -1,7 +1,9 @@
 body {
   background-color: #230046;
   color: #ffffff;
+  font-size: 16px;
 }
+
 .mainContainer {
   display: flex;
   justify-content: center;
@@ -18,7 +20,7 @@ body {
 
 .header {
   text-align: center;
-  font-size: 32px;
+  font-size: 2rem;
   font-weight: 900;
 }
 
@@ -27,6 +29,7 @@ body {
   color: #ffffff;
   font-weight: 700;
   margin-top: 16px;
+  font-size: 1rem;
 }
 
 .buttons {
@@ -41,13 +44,19 @@ body {
   padding: 12px;
   border: 0;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 600;
+}
+
+.connection-status {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 0.85rem;
 }
 
 .connected-pill {
   display: inline-block;
-  margin: 1px 10px;
+  margin-right: 5px;
   width: 10px;
   height: 10px;
   border-radius: 100px;
