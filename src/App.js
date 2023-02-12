@@ -8,6 +8,7 @@ function App() {
   const contractABI = abi.abi;
   const [allWaves, setAllWaves] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
   const [currentAccount, setCurrentAccount] = useState("");
   const contractAddress = "0xd0Aa4209C93093D6BF4095ec9b8ceA5395C28955";
 
@@ -140,12 +141,18 @@ function App() {
 
         <textarea
           className="waveMessage"
+          value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Say something..."
+          disabled={isLoading}
         />
 
         <div className="buttons">
-          <button className="waveButton" onClick={() => wave(message)} disabled={isLoading ? true : false}>
+          <button
+            className="waveButton"
+            onClick={() => wave(message)}
+            disabled={isLoading }
+          >
             {buttonText}
           </button>
 
