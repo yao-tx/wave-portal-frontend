@@ -44,3 +44,12 @@ body {
   font-size: 16px;
   font-weight: 600;
 }
+
+.connected-pill {
+  display: inline-block;
+  margin: 1px 10px;
+  width: 10px;
+  height: 10px;
+  border-radius: 100px;
+  background-color: #39ff14;
+}

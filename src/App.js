@@ -149,6 +149,11 @@ function App() {
               Connect wallet
             </button>
           )}
+          {currentAccount && (
+            <div>
+              <span className="connected-pill" /> Wallet Connected
+            </div>
+          )}
 
           {allWaves.map((wave, index) => {
             return (
