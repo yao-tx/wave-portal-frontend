@@ -24,6 +24,12 @@ body {
   font-weight: 900;
 }
 
+.wavesHeader {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
 .bio {
   text-align: center;
   color: #ffffff;
@@ -36,6 +42,7 @@ body {
   display: flex;
   flex-direction: column;
   margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 
 .waveMessage {
@@ -59,7 +66,8 @@ body {
 }
 
 .wavesContainer {
-  margin-top: 2rem;
+  height: 300px;
+  overflow-y: auto;
 }
 
 .waveCard {

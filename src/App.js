@@ -198,6 +198,7 @@ function App() {
           )}
         </div>
 
+        <h2 className="wavesHeader">Waves Received:</h2>
         <div className="wavesContainer">
         {allWaves.map((wave, index) => {
           return (
