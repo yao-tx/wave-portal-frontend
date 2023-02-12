@@ -139,15 +139,15 @@ function App() {
           Connect your Ethereum wallet and wave at me!
         </div>
 
-        <textarea
-          className="waveMessage"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Say something..."
-          disabled={isLoading}
-        />
+        <div className="waveSection">
+          <textarea
+            className="waveMessage"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Say something..."
+            disabled={isLoading}
+          />
 
-        <div className="buttons">
           <button
             className="waveButton"
             onClick={() => wave(message)}
@@ -172,10 +172,10 @@ function App() {
         <div className="wavesContainer">
         {allWaves.map((wave, index) => {
           return (
-            <div key={index} style={{ backgroundColor: "OldLace", marginTop: "16px", padding: "8px" }}>
-              <div>Address: {wave.address}</div>
-              <div>Time: {wave.timestamp.toString()}</div>
-              <div>Message: {wave.message}</div>
+            <div key={index} className="waveCard">
+              <p>Address: {wave.address}</p>
+              <p>Time: {wave.timestamp.toString()}</p>
+              <p>Message: {wave.message}</p>
             </div>
           )
         })}
